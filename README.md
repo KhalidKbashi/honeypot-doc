@@ -30,65 +30,82 @@ A. Creating a VM on Azure
 
 ![Pasted image ٢٠٢٤٠٤١٨١٧٣٩٠٩](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/1789d7c0-316e-40c6-8c51-39de6af4ba7c)
 
-9. for sake of arrangement hover to tags tab and create a tag to make managing and using VM easier
-	1. ![[Pasted image ٢٠٢٤٠٤١٨١٧٤٠٥١.png]]
+9. for sake of arrangement hover to "Tags" tab and create a tag to make managing and using VM easier
+
+![Pasted image ٢٠٢٤٠٤١٨١٧٤٠٥١](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/f4f7b16d-6dfb-42eb-8748-5d27c5db466f)
+
 10. Click on Review + Create
 11. open Virtual Machines again and select the VM we've Just created
 12. Hover to Networking Section and Copy the Public IP Address 
-	1. ![[Pasted image ٢٠٢٤٠٤١٨١٧٤٤٥٤.png]]
+
+![Pasted image ٢٠٢٤٠٤١٨١٧٤٤٥٤](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/558df3a5-cc11-4069-ade4-30083aa159d2)
+
 13. now let's connect to the VM through VM's Public IP Address
 	1. ssh -p 22 20.29.117.249
 
-installing the SSH Pot
-* the pot rejects every credentials attacker enters and logs it
+B. installing and Configuring the SSH Pot
+* the main job this pot pot does is that it rejects any connection request and logs the credentials the attacker using
+* i'll use Honeypot created by kingtuna
 
-1. firstly i'll close the port 22 cause i want to run the honeypot through 
+1. firstly i'll close the port 22 cause i want it to run by the honeypot
 	1. sudo systemctl stop ssh
 	2. sudo systemctl stop ssh.socket
 2. now let's open another port for SSH connection
 	1. sudo sshd -p 55677
-	2. now you can safely terminate current session and use the 55677 port if any somthing wrong happened
-3. i'll use Honeypot created by kingtuna
-4. clone the repo using 
+	* now you can safely terminate current session and use the 55677 port if any somthing wrong happened
+3. clone the repo using 
 	1. git clone https://github.com/kingtuna/sshpot.git
-5. ![[Pasted image ٢٠٢٤٠٤١٨٠٨٠٣١٧.png]]
-6. reading the end of README file there will be some prerequisites packages to install 
+ 
+![Pasted image ٢٠٢٤٠٤١٨٠٨٠٣١٧](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/439dd541-4516-4930-b38e-427495188585)
+
+4. after reading the README file there will be some prerequisites packages to be installed
 	1. sudo apt update
 	2. sudo apt-get _install libssh_-dev
 	3. sudo apt install make
-7. next we will generate an RSA public key to be used by the server (the pot)
+5. next we will need generate an RSA public key to be used by the server (the pot)
 	1. ssh-keygen -t rsa
 	2. next enter the file name that the RSA key will be stored into
-	3. ![[Pasted image ٢٠٢٤٠٤١٨٠٨٠٩٢٤.png]]
-8. open configuration file config.h
+
+![Pasted image ٢٠٢٤٠٤١٨٠٨٠٩٢٤](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/4e63c299-b5ca-4844-9f6c-eab53ee699d2)
+
+6. open configuration file config.h
 	1. nano config.h
-	2. ![[Pasted image ٢٠٢٤٠٤١٨٠٨٠٦٥٩.png]]
-	3. we will change the path of the RSA_KEYFILE to the file we've just created (temp.txt)
-9. now lets MAKE it
+ 	2. we will change the path of the RSA_KEYFILE to the file we've just created (temp.txt in step 5)
+
+![Pasted image ٢٠٢٤٠٤١٨٠٨٠٦٥٩](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/bff65375-d24b-4795-bb62-3c860b73aab2)
+	
+7. now lets MAKE it
 	1. just type "make"
-	2. ![[Pasted image ٢٠٢٤٠٤١٨٠٨١٦٢٠.png]]
-10. now let's run it
+
+![Pasted image ٢٠٢٤٠٤١٨٠٨١٦٢٠](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/40ee0b2d-f86f-49d7-a00b-cd97bb8e67f5)
+
+8. now let's run it
 	1. sudo ./sshpot -p 22 &
-	2. ![[Pasted image ٢٠٢٤٠٤١٨٠٨١٨٤٥.png]]
-11. to make sure it's running
+
+![Pasted image ٢٠٢٤٠٤١٨٠٨١٨٤٥](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/924ddaef-26e7-4768-94f6-347a3654002e)
+
+9. to make sure it's running
 	1. sudo ss -tulp | grep ssh
-	2. ![[Pasted image ٢٠٢٤٠٤١٨٠٨١٩٥٥.png]]
 
-now let's install the MySQL Pot
+![Pasted image ٢٠٢٤٠٤١٨٠٨١٩٥٥](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/43ad39fb-44d7-485b-8287-4da7ee4a6696)
+
+
+C. now let's install the MySQL Pot
 * the pot records all credentials attacker typing and logs it
+* i'll use Honeypot created by qeeqbox
 
-1. i'll use Honeypot created by qeeqbox
-3. Firstly the prerequisites to install 
+1. Firstly the prerequisites to install 
 	1. sudo apt update
 	2. sudo apt-get install postgresql
 	3. sudo apt-get install python-psycopg2
 	4. sudo apt-get install libpq-dev
 	5. sudo apt install python3-pip
 	6. pip3 install honeypots
-4. create the config file for MySQL
+2. create the config file for MySQL
 	1. nano config.json
-	2. past this
-		1. {
+	2. just copy and past this and save it
+```
+{
   "logs": "file,terminal,json",
   "logs_location": "/var/log/honeypots/",
   "syslog_address": "",
@@ -112,9 +129,11 @@ now let's install the MySQL Pot
     }
   }
 }
-	3. save it
-5. run it
+```
+3. run it
 	1. sudo -E python3 -m honeypots --setup mysql --config config.json &
-6. to make sure it's running
+4. to make sure it's running
 	1. sudo ss -tulp | grep mysql
-	2. ![[Pasted image ٢٠٢٤٠٤١٨٠٨٥٢٠٣.png]]
+
+![Pasted image ٢٠٢٤٠٤١٨٠٨٥٢٠٣](https://github.com/KhalidKbashi/honeypot-doc/assets/54905807/f0114402-8eb8-4a26-9512-de2bac3c0847)
+
